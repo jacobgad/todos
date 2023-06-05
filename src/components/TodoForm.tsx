@@ -20,16 +20,24 @@ const schema = z.object({
 });
 
 export default function TodoForm(props: Props) {
-	const { register, handleSubmit } = useForm<Schema>({
+	const { register, handleSubmit, formState } = useForm<Schema>({
 		resolver: zodResolver(schema),
 		defaultValues: props.defaultValues,
 	});
 
 	return (
-		<form onSubmit={handleSubmit(props.onSubmit)}>
-			<input type='text' {...register('name')} />
-			<input type='checkbox' {...register('completed')} />
-			<button type='submit' disabled={props.isLoading}>
+		<form onSubmit={handleSubmit(props.onSubmit)} className='flex w-full gap-2'>
+			<input
+				type='text'
+				{...register('name')}
+				className='flex-grow rounded border border-blue-600 px-2 py-1'
+			/>
+			<input type='checkbox' {...register('completed')} className='h-8 w-8 rounded' />
+			<button
+				type='submit'
+				disabled={props.isLoading || !formState.isDirty}
+				className='rounded bg-green-700 px-2 py-1 text-green-50 disabled:bg-gray-300'
+			>
 				{props.buttonText ?? 'Save'}
 			</button>
 		</form>

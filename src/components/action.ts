@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import { zact } from 'zact/server';
 import prisma from '@/utils/prisma';
+import { revalidatePath } from 'next/cache';
 
 export const createTodo = zact(
 	z.object({
@@ -11,6 +12,7 @@ export const createTodo = zact(
 	})
 )(async (input) => {
 	const todo = await prisma.todo.create({ data: input });
+	revalidatePath('/');
 	return todo;
 });
 
@@ -22,5 +24,6 @@ export const updateTodo = zact(
 	})
 )(async (input) => {
 	const todo = await prisma.todo.update({ where: { id: input.id }, data: input });
+	revalidatePath('/');
 	return todo;
 });
