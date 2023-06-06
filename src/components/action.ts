@@ -27,3 +27,9 @@ export const updateTodo = zact(
 	revalidatePath('/');
 	return todo;
 });
+
+export const deleteTodo = zact(z.object({ id: z.number().int() }))(async (input) => {
+	const todo = await prisma.todo.delete({ where: { id: input.id } });
+	revalidatePath('/');
+	return todo;
+});

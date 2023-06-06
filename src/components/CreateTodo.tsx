@@ -5,7 +5,7 @@ import { useZact } from 'zact/client';
 import TodoForm from './TodoForm';
 
 export default function CreateTodo() {
-	const { mutate, isLoading } = useZact(createTodo);
+	const { mutate, isLoading, data } = useZact(createTodo);
 
-	return <TodoForm onSubmit={mutate} isLoading={isLoading} />;
+	return <TodoForm key={data?.id} onSubmit={mutate} isLoading={isLoading} />;
 }

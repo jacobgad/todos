@@ -4,6 +4,7 @@ import type { Todo } from '@prisma/client';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
 
 type Props = {
 	onSubmit: (data: Schema) => void;
@@ -20,23 +21,23 @@ const schema = z.object({
 });
 
 export default function TodoForm(props: Props) {
-	const { register, handleSubmit, formState } = useForm<Schema>({
+	const { register, handleSubmit, formState, reset } = useForm<Schema>({
 		resolver: zodResolver(schema),
 		defaultValues: props.defaultValues,
 	});
 
+	useEffect(() => {
+		reset(props.defaultValues);
+	}, [props.defaultValues, reset]);
+
 	return (
 		<form onSubmit={handleSubmit(props.onSubmit)} className='flex w-full gap-2'>
-			<input
-				type='text'
-				{...register('name')}
-				className='flex-grow rounded border border-blue-600 px-2 py-1'
-			/>
-			<input type='checkbox' {...register('completed')} className='h-8 w-8 rounded' />
+			<input type='text' {...register('name')} className='flex-grow rounded border px-2 py-1' />
+			<input type='checkbox' {...register('completed')} className='h-9 w-9 rounded' />
 			<button
 				type='submit'
 				disabled={props.isLoading || !formState.isDirty}
-				className='rounded bg-green-700 px-2 py-1 text-green-50 disabled:bg-gray-300'
+				className='rounded bg-green-700 px-2 py-1 text-sm text-green-50 disabled:bg-gray-300'
 			>
 				{props.buttonText ?? 'Save'}
 			</button>

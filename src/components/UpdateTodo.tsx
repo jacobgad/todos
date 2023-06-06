@@ -14,6 +14,7 @@ export default function UpdateTodo({ todo }: Props) {
 
 	return (
 		<TodoForm
+			key={todo.id}
 			defaultValues={todo}
 			onSubmit={(data) => mutate({ ...data, id: todo.id })}
 			isLoading={isLoading}
